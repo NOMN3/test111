@@ -1,8 +1,8 @@
 package page
 
 import (
-	"test2/client/common"
 	"fmt"
+	"test2/client/common"
 )
 
 func Mainpage() { // 主页面
@@ -11,7 +11,7 @@ func Mainpage() { // 主页面
 	fmt.Println("2、添加好友")
 	fmt.Println("3、退出软件")
 }
-func Select() {// 获取用户输入1
+func Select() { // 获取用户输入1
 	fmt.Scanf("%d", &common.Select1)
 }
 
@@ -39,7 +39,7 @@ func Errorpage4() { // 错误输入
 
 // --------------------------------------------------------
 
-func change1() {// 切换页面(主界面)
+func change1() { // 切换页面(主界面)
 	switch common.Select1 {
 	case 1:
 		Mainpage1()
@@ -52,9 +52,10 @@ func change1() {// 切换页面(主界面)
 	}
 }
 
-func change2() {// 切换页面(好友列表)
+func change2() { // 切换页面(好友列表)
 }
 
-func change3() {// 切换页面(添加好友)
+func change3() { // 切换页面(添加好友)
 }
 
+// 123231231312313123123121112323312123321
