@@ -3,7 +3,34 @@ package page
 import (
 	"fmt"
 	"test2/client/common"
+	"net"
+	"bufio"
+	"os"
 )
+
+func Loginpage() int { // 登录页面
+	fmt.Println("-----聊天软件登录页面-----")
+	fmt.Println("请输入用户名：")
+	fmt.Scanf("%s", &common.Account)
+	
+	
+	fmt.Println("请输入密码：")
+	fmt.Scanf("%s", &common.Password)
+
+	return 0
+	
+	
+	
+}
+
+func Registerpage() { // 注册页面
+	fmt.Println("-----聊天软件注册页面-----")
+	fmt.Println("请输入用户名：")
+	fmt.Println("请输入密码：")
+	fmt.Println("请再次输入密码：")
+}
+
+
 
 func Mainpage() { // 主页面
 	fmt.Println("-----聊天软件主页面-----")
@@ -19,9 +46,7 @@ func Select() { // 获取用户输入1
 
 func Mainpage1() { // 好友列表
 	fmt.Println("-----好友列表-----")
-	fmt.Println("1、好友1")
-	fmt.Println("2、好友2")
-	fmt.Println("3、好友3")
+
 }
 
 func Mainpage2() { // 添加好友
@@ -39,23 +64,29 @@ func Errorpage4() { // 错误输入
 
 // --------------------------------------------------------
 
-func change1() { // 切换页面(主界面)
-	switch common.Select1 {
-	case 1:
-		Mainpage1()
-	case 2:
-		Mainpage2()
-	case 3:
-		Mainpage3()
-	default:
-		Errorpage4()
+func Change1() { // 切换页面(主界面)
+	for {
+		again := false
+		switch common.Select1 {
+		case 1:
+			Mainpage1()
+		case 2:
+			Mainpage2()
+		case 3:
+			Mainpage3()
+		default:
+			Errorpage4()
+			again = true
+		}
+		if !again {
+			break
+		}
 	}
 }
 
 func change2() { // 切换页面(好友列表)
+
 }
 
 func change3() { // 切换页面(添加好友)
 }
-
-// 123231231312313123123121112323312123321
