@@ -5,5 +5,5 @@ import (
 	
 )
 var Select1 int = 0
-var Account string = " "
-var Password string = " "
+var Account string = " " 
+var Password string = " " 

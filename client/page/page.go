@@ -8,12 +8,23 @@ import (
 	"os"
 )
 
-func Loginpage() int { // 登录页面
+func Loginpage() int { // 登录页面    （如果返回值是1就是有问题，0就是正常运行）
+	conn, err := net.Dial("tcp", "")
 	fmt.Println("-----聊天软件登录页面-----")
 	fmt.Println("请输入用户名：")
-	fmt.Scanf("%s", &common.Account)
-	
-	
+	reader := bufio.NewReader(os.Stdin)
+	line, err2 := reader.ReadString('\n')
+	if err2 != nil {
+		fmt.Println("reader.ReadString err2:", err2)
+		return 1
+	}
+	common.Account = line[:len(line)-1] // 去掉换行符
+	n, err3 := conn.Write([]byte(common.Account))
+	if err3 != nil {
+		fmt.Println("conn.Write err3:", err3)
+		return 1
+	}
+
 	fmt.Println("请输入密码：")
 	fmt.Scanf("%s", &common.Password)
 
