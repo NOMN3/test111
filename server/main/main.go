@@ -1,38 +1,28 @@
+// 服务器端代码
+
 package main
 
 //  在数据库里写一个空的用户哈希表，键为用户名，值为密码，只需执行一次
 import (
+	"test2/server/model"
+	"test2/server/database"
+	"test2/server/common"
 	"github.com/gomodule/redigo/redis"
 	"fmt"
 	"net"
 )
 
-func process(conn net.Conn) {
-	// 处理客户连接的逻辑
-	defer conn.Close()
-	fmt.Println("正在处理客户连接...")
-	
-	for { //循环接收客户端发送的数据
-		buf := make([]byte, 1024)
-		n ,err := conn.Read(buf)
-		if err != nil{
-			fmt.Println("conn.Read err:", err)
-			return
-		}
-		fmt.Println("收到客户数据：", string(buf[:n]))
-		// 这里可以根据收到的数据进行相应的处理，比如登录、注册等
-		
-
-	}
-}
 
 func main() {
-	conn, err := redis.Dial("tcp", "localhost:6379")
+	// 连接到Redis服务器
+	conn,err := redis.Dial("tcp","")// 这里的地址和端口需要根据实际情况修改
 	if err != nil {
-		fmt.Println("redis.Dial err:", err)
+		fmt.Println("连接数据库失败！", err)
 		return
 	}
-	defer conn.Close()
+	defer conn.Close() // 连接结束后关闭连接
+
+	fmt.Println("连接数据库成功！")
 
 	// 创建一个TCP监听器，监听8080端口
 	fmt.Println("服务器正在监听8888端口...")
@@ -53,8 +43,6 @@ func main() {
 			fmt.Println("客户地址：", conn.RemoteAddr().String())
 		}
 		// 处理客户连接
-		go process(conn)
+		go model.Process(conn)
 	}
-
-	
 }
