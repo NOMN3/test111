@@ -61,7 +61,7 @@ func ReadData(conn net.Conn) string {
 // 登录验证
 func Login(conn net.Conn) {
 	common.Println(conn, "请输入用户名：")
-	common.Account = ReadData(conn)
+	common.Account = ReadData(conn)	// 这个是全局变量，可能会覆盖错误，后续要改成局部变量，下面全部的全局变量也是！！！！！！！！！！！
 	fmt.Println("common.Account:", common.Account)
 	if !IsExist(common.Account) { // 判断用户名是否存在
 		common.Println(conn, "用户名不存在！")
