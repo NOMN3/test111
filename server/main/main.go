@@ -4,14 +4,14 @@ package main
 
 //  在数据库里写一个空的用户哈希表，键为用户名，值为密码，只需执行一次
 import (
-	"test2/server/model"
-	"test2/server/database"
-	"test2/server/common"
-	"github.com/gomodule/redigo/redis"
 	"fmt"
 	"net"
-)
+	_ "test2/server/common"
+	_ "test2/server/database"
+	"test2/server/model"
 
+	_ "github.com/gomodule/redigo/redis"
+)
 
 func main() {
 	// // 连接到Redis服务器
@@ -26,7 +26,7 @@ func main() {
 
 	// 创建一个TCP监听器，监听8080端口
 	fmt.Println("服务器正在监听8888端口...")
-	listener, err := net.Listen("tcp", "8888")
+	listener, err := net.Listen("tcp", "192.168.31.201:8888")
 	if err != nil {
 		fmt.Println("net.Listen err:", err)
 		return
@@ -38,7 +38,7 @@ func main() {
 		conn, err := listener.Accept() // 在这里阻塞等待连接
 		if err != nil {
 			fmt.Println("listener.Accept err:", err)
-		}else {
+		} else {
 			fmt.Println("有客户连接了！")
 			fmt.Println("客户地址：", conn.RemoteAddr().String())
 		}

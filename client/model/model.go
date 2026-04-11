@@ -1,7 +1,6 @@
 package model
 
 import (
-	"test2/client/common"
-	"fmt"
+	_ "fmt"
+	_ "test2/client/common"
 )
-
