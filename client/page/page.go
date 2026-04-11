@@ -9,7 +9,14 @@ import (
 )
 
 func Loginpage() int { // 登录页面    （如果返回值是1就是有问题，0就是正常运行）
-	conn, err := net.Dial("tcp", "")
+	conn, err := net.Dial("tcp", "192.168.31.201:8888") // 这里的地址和端口需要根据实际情况修改
+	if err != nil {
+		fmt.Println("连接服务器失败！", err)
+		return 1
+	}
+	defer conn.Close() // 连接结束后关闭连接
+	fmt.Println("连接服务器成功！")
+	
 	fmt.Println("-----聊天软件登录页面-----")
 
 	// 用户名的处理：
@@ -43,9 +50,6 @@ func Registerpage() { // 注册页面
 	fmt.Println("请输入密码：")
 	fmt.Println("请再次输入密码：")
 }
-
-
-
 func Mainpage() { // 主页面
 	fmt.Println("-----聊天软件主页面-----")
 	fmt.Println("1、好友列表")

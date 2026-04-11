@@ -14,15 +14,15 @@ import (
 
 
 func main() {
-	// 连接到Redis服务器
-	conn,err := redis.Dial("tcp","")// 这里的地址和端口需要根据实际情况修改
-	if err != nil {
-		fmt.Println("连接数据库失败！", err)
-		return
-	}
-	defer conn.Close() // 连接结束后关闭连接
+	// // 连接到Redis服务器
+	// conn,err := redis.Dial("tcp","localhost:6379")// 这里的地址和端口需要根据实际情况修改
+	// if err != nil {
+	// 	fmt.Println("连接数据库失败！", err)
+	// 	return
+	// }
+	// defer conn.Close() // 连接结束后关闭连接
 
-	fmt.Println("连接数据库成功！")
+	// fmt.Println("连接数据库成功！")
 
 	// 创建一个TCP监听器，监听8080端口
 	fmt.Println("服务器正在监听8888端口...")
