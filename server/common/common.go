@@ -1,7 +1,8 @@
 package common
 
 import (
-	_"fmt"
+	"fmt"
+	"net"
 )
 
 var Account string = " "
@@ -13,8 +14,13 @@ type Users_AP struct {
 }
 
 // 写一个给客户端数据的函数
-func WriteData(conn net.Conn, data string) {
-	
+func Println(conn net.Conn, data string) {
+	_, err := conn.Write([]byte(data))
+	if err != nil {
+		fmt.Println("发送消息失败:", err)
+		return
+	}
+}
 
 // func AP_Common() *Users_AP { // 暂时没用啊，后续可能会用到
 // 	user_AP := Users_AP{}

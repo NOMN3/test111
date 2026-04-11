@@ -1,9 +1,9 @@
 package main
 
 import (
-	"fmt"
-	"test2/client/common"
-	"test2/client/model"
+	_"fmt"
+	_"test2/client/common"
+	_"test2/client/model"
 	"test2/client/page"
 )
 

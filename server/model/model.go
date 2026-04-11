@@ -15,7 +15,7 @@ func IsExist(account string) bool {
 	return exists
 }
 
-// 将服务器内存储的账号信息带入内存的函数
+// 将服务器内存储的账号信息带入内存的函数,供后续使用
 func LoadUserInfo() *database.Users_ap {// 全局使用！！！！！！
 	users_model := database.AP_Database() // 造一个map，键为用户名，值为密码，是地址
 	database.ReadUserInfo(users_model)
@@ -26,43 +26,51 @@ func LoadUserInfo() *database.Users_ap {// 全局使用！！！！！！
 // 注册功能的代码
 func Register(conn net.Conn) {
 	var account string
-	fmt.Println("请输入用户名：")
+	common.Println("请输入用户名：")
 	account = ReadData(conn)
 	
 	var password string
-	fmt.Println("请输入密码：")
+	common.Println(conn,"请输入密码：")
 	password = ReadData(conn)
 
 	users_map := LoadUserInfo()
 	(*users_map)[account] = &common.Users_AP{Account: account, Password: password} // 将用户输入的账号和密码存入map中
-	fmt.Println("注册成功！")
+	common.Println(conn,"注册成功！")
 	// 这里可以将users_map中的用户信息写入服务器的本地文件中，供后续使用
 	database.WriteUserInfo(*users_map)
 }
 
 // 登录验证
 func Login(conn net.Conn) {
-	fmt.Println("请输入用户名：")
+	common.Println(conn,"请输入用户名：")
 	common.Account = ReadData(conn)
-	fmt.Println("common.Account:", common.Account)
+	fmt.Println(conn,"common.Account:", common.Account)
 	if !IsExist(common.Account) { // 判断用户名是否存在
-		fmt.Println("用户名不存在！")
-		
-		fmt.Println("请注册一个新账号！")
-		fmt.Println("正在跳转到注册界面...")
+		common.Println(conn,"用户名不存在！")
+		// 询问用户是否要注册一个新账号，还是重新输入用户名
+		common.Println(conn,"请问您要注册一个新账号吗？(y/n)")
+		answer := ReadData(conn)
+		if answer != "y" {
+			common.Println(conn,"请重新输入用户名！")
+			Login(conn)
+			return
+		}
+
+		common.Println(conn,"正在跳转到注册界面...")
 		Register(conn)
 		Login(conn)
+		return
 	}
 	
-	fmt.Println("请输入密码：")
+	common.Println(conn,"请输入密码：")
 	common.Password = ReadData(conn)
 	fmt.Println("common.Password:", common.Password)
 
 	users_map := LoadUserInfo()
 
 	if (*users_map)[common.Account].Password != common.Password { // 判断密码是否正确
-		fmt.Println("密码错误！")
-		fmt.Println("请重新登录！")
+		common.Println(conn,"密码错误！")
+		common.Println(conn,"请重新登录！")
 		Login(conn)
 	}
 
@@ -85,9 +93,9 @@ func ReadData(conn net.Conn) string {
 
 
 // 处理客户登录的函数
-func Process(conn net.Conn) {
+func Process(conn net.Conn) {// 传入main.go里接受到的客户连接，供后续使用
 	// 处理客户连接的逻辑
 	defer conn.Close()
 	fmt.Println("正在处理客户连接...")
-	
+	Login(conn)
 }
