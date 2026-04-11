@@ -24,30 +24,48 @@ func LoadUserInfo() *database.Users_ap {// 全局使用！！！！！！
 }
 
 // 注册功能的代码
-func Register() {
+func Register(conn net.Conn) {
 	var account string
 	fmt.Println("请输入用户名：")
-	fmt.Scanln(&account)
+	account = ReadData(conn)
 	
 	var password string
 	fmt.Println("请输入密码：")
-	fmt.Scanln(&password)
+	password = ReadData(conn)
 
 	users_map := LoadUserInfo()
 	(*users_map)[account] = &common.Users_AP{Account: account, Password: password} // 将用户输入的账号和密码存入map中
+	fmt.Println("注册成功！")
+	// 这里可以将users_map中的用户信息写入服务器的本地文件中，供后续使用
+	database.WriteUserInfo(*users_map)
 }
 
-// 登录函数
+// 登录验证
 func Login(conn net.Conn) {
-	// 这里可以根据用户输入的账号信息进行登录验证等操作
 	fmt.Println("请输入用户名：")
 	common.Account = ReadData(conn)
 	fmt.Println("common.Account:", common.Account)
 	if !IsExist(common.Account) { // 判断用户名是否存在
 		fmt.Println("用户名不存在！")
+		
 		fmt.Println("请注册一个新账号！")
-		Register()
+		fmt.Println("正在跳转到注册界面...")
+		Register(conn)
+		Login(conn)
 	}
+	
+	fmt.Println("请输入密码：")
+	common.Password = ReadData(conn)
+	fmt.Println("common.Password:", common.Password)
+
+	users_map := LoadUserInfo()
+
+	if (*users_map)[common.Account].Password != common.Password { // 判断密码是否正确
+		fmt.Println("密码错误！")
+		fmt.Println("请重新登录！")
+		Login(conn)
+	}
+
 }
 
 // 读取客户传来的数据的函数，并返回一个字符串，供后续使用

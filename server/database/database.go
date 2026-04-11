@@ -12,7 +12,7 @@ import (
 type Users_ap map[string]*common.Users_AP // 不知道用不用指针，不知道有什么区别，唯一想到的作用是可以去地址直接改内容，但是需要吗
 
 // 写一个方法，把用户的信息写进服务端的本地
-func (users Users_ap) writeUserInfo() {
+func WriteUserInfo(users Users_ap)  {
 	file, err := os.OpenFile("users.txt", os.O_APPEND|os.O_WRONLY, 0666) // 这里的文件路径需要根据实际情况修改
 	if err != nil {
 		fmt.Println("打开文件失败！", err)
