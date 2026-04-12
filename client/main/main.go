@@ -11,7 +11,7 @@ import (
 
 func main() {
 	for { // 后续记得加上defer
-		conn, err := net.Dial("tcp", "192.168.31.201:8888") // 这里的地址和端口需要根据实际情况修改
+		conn, err := net.Dial("tcp", "10.214.87.144:8888") // 这里的地址和端口需要根据实际情况修改
 		if err != nil {
 			fmt.Println("连接服务器失败！", err, "一秒后重试······")
 			time.Sleep(1 * time.Second)
