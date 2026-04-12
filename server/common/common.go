@@ -14,7 +14,7 @@ type Users_AP struct {
 	Password string // 暂时先加那么多，不知道还有什么要加
 }
 
-// 写一个给客户端数据的函数
+// 写一个发送客户端数据的函数
 func Println(conn net.Conn, data string) {
 	_, err := conn.Write([]byte(data))
 	if err != nil {

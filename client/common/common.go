@@ -1,20 +1,42 @@
 package common
 
 import (
+	"bufio"
 	"fmt"
 	"net"
+	"os"
+	_ "time"
 )
 
 var Select1 int = 0
-var Account string = " "
 var Password string = " "
 
-// 这里写一个全局变量，存储服务器的地址和端口
-func Connect() net.Conn {
-	conn, err := net.Dial("tcp", "192.168.31.201:8888") // 这里的地址和端口需要根据实际情况修改
-	if err != nil {
-		fmt.Println("连接服务器失败！", err)
-		return nil
+func Sender(conn net.Conn) string { // 发送的函数
+	var Data_info string = ""
+	reader := bufio.NewReader(os.Stdin)   // 取终端的一行数据
+	line, err2 := reader.ReadString('\n') //读到换行符
+	if err2 != nil {
+		fmt.Println("reader.ReadString err2:", err2)
+		return "error"
 	}
-	return conn
+	Data_info = line[:len(line)-1]           // 去掉换行符
+	_, err3 := conn.Write([]byte(Data_info)) // 将用户名发送给服务器
+	if err3 != nil {
+		fmt.Println("conn.Write err3:", err3)
+		return "error"
+	}
+	return Data_info
+}
+
+// 读取的函数：
+func Conn_Reader(conn net.Conn) string { // 输出bool和string
+	buf := make([]byte, 1024)
+
+	// 读取服务器数据
+	n, err := conn.Read(buf)
+	if err != nil {
+		return ""
+	}
+
+	return string(buf[:n])
 }
