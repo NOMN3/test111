@@ -19,7 +19,7 @@ func Sender(conn net.Conn) string { // 发送的函数
 		fmt.Println("reader.ReadString err2:", err2)
 		return "error"
 	}
-	Data_info = line[:len(line)-1]           // 去掉换行符
+	Data_info = line[:len(line)-2]           // 去掉换行符
 	_, err3 := conn.Write([]byte(Data_info)) // 将用户名发送给服务器
 	if err3 != nil {
 		fmt.Println("conn.Write err3:", err3)
@@ -29,13 +29,13 @@ func Sender(conn net.Conn) string { // 发送的函数
 }
 
 // 读取的函数：
-func Conn_Reader(conn net.Conn) string { // 输出bool和string
+func Conn_Reader(conn net.Conn) string { // 输出string
 	buf := make([]byte, 1024)
 
 	// 读取服务器数据
 	n, err := conn.Read(buf)
 	if err != nil {
-		return ""
+		return "error"
 	}
 
 	return string(buf[:n])

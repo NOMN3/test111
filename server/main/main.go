@@ -26,7 +26,7 @@ func main() {
 
 	// 创建一个TCP监听器，监听8080端口
 	fmt.Println("服务器正在监听8888端口...")
-	listener, err := net.Listen("tcp", "192.168.31.201:8888")
+	listener, err := net.Listen("tcp", "192.168.31.201:8888") // 这个是服务器的ipv4，可以按需改变
 	if err != nil {
 		fmt.Println("net.Listen err:", err)
 		return

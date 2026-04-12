@@ -10,11 +10,15 @@ import (
 )
 
 // 返回密码，判断用户名是否存在的函数
-func IsExist(account string) (string,bool) {
+func IsExist(account string) (string, bool) {
 	users_map := LoadUserInfo() // 将服务器内存储的账号信息带入内存
 	// 这里可以根据用户输入的账号信息进行登录验证等操作
-	A_Password, exists := (*users_map)[account]
-	return (*A_Password).Password,exists
+	if A_Password, exists := (*users_map)[account]; !exists {
+		return "", exists
+	} else {
+		return (*A_Password).Password, exists
+	}
+
 }
 
 // 将服务器内存储的账号信息带入内存的函数,供后续使用
@@ -28,16 +32,15 @@ func LoadUserInfo() *database.Users_ap { // 全局使用！！！！！！
 // 注册功能的代码
 func Register(conn net.Conn) {
 	var account string
-	common.Println(conn, "请输入用户名：")// 发注册111
-	account = ReadData(conn)// 收注册111
+
+	account = ReadData(conn) // 收注册111
 
 	var password string
-	common.Println(conn, "请输入密码：")// 发注册222
-	password = ReadData(conn)// 收注册222
+	password = ReadData(conn) // 收注册222
 
 	users_map := LoadUserInfo()
 	(*users_map)[account] = &common.Users_AP{Account: account, Password: password} // 将用户输入的账号和密码存入map中
-	common.Println(conn, "注册成功！")// 发注册333
+
 	// 这里可以将users_map中的用户信息写入服务器的本地文件中，供后续使用
 	database.WriteUserInfo(*users_map)
 }
@@ -48,7 +51,7 @@ func ReadData(conn net.Conn) string {
 	n, err := conn.Read(buf)
 	if err != nil {
 		fmt.Println("conn.Read err:", err)
-		return "nil"
+		return "error"
 	}
 	fmt.Println("收到客户数据：", string(buf[:n]))
 	// 这里可以根据收到的数据进行相应的处理，比如登录、注册等
@@ -59,13 +62,12 @@ func ReadData(conn net.Conn) string {
 
 // 登录验证
 func Login(conn net.Conn) { // 次主要
-	Account := ReadData(conn) // 111 这个是全局变量，可能会覆盖错误，后续要改成局部变量，下面全部的全局变量也是！！！！！！！！！！！
-	var password string
+	Account := ReadData(conn) // 111
 	fmt.Println("Account:", Account)
-	if _, exist := IsExist(Account);exist { // 判断用户名是否存在
+	if _, exist := IsExist(Account); !exist { // 判断用户名是否存在
 		common.Println(conn, "not") // 给客户端说明没有此账号
 		answer := ReadData(conn)    // 222 确认用户选择
-		if answer != "n" {
+		if answer == "n" {
 			Login(conn)
 			return
 		}
@@ -76,18 +78,19 @@ func Login(conn net.Conn) { // 次主要
 		return
 	}
 
-	common.Println(conn, "请输入密码：")
-	Password := ReadData(conn)
-	fmt.Println("Password:", Password)
+	for {
+		Password := ReadData(conn)
+		fmt.Println("Password:", Password)
 
-	users_map := LoadUserInfo()
+		users_map := LoadUserInfo()
 
-	if (*users_map)[Account].Password != Password { // 判断密码是否正确
-		common.Println(conn, "密码错误！")
-		common.Println(conn, "请重新登录！")
-		Login(conn)
+		if (*users_map)[Account].Password != Password { // 密码错误的话
+			common.Println(conn, "wrong")
+			continue
+		}
+		break
 	}
-
+	fmt.Println("用户登录成功！")
 }
 
 // 处理客户登录的函数
