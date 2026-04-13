@@ -23,6 +23,18 @@ func Println(conn net.Conn, data string) {
 	}
 }
 
+// 需要一个map，键是当前用户名，值是map，键是用户名，值是 {ip地址,信息（带时间）}的结构体
+// 对话信息
+type dialogue struct {
+}
+
+// 朋友信息
+type fri struct {
+	coip net.Addr
+}
+
+var User_fri = make(map[string]map[string]fri)
+
 // func AP_Common() *Users_AP { // 暂时没用啊，后续可能会用到
 // 	user_AP := Users_AP{}
 // 	return &user_AP

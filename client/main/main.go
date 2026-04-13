@@ -17,7 +17,7 @@ func main() {
 			time.Sleep(1 * time.Second)
 			continue
 		}
-		if !page.Loginpage(conn) { // 显示登录页面加判断是否断连
+		if !page.Process(conn) { // 显示登录页面加判断是否断连
 			fmt.Println("服务器断开,等待一下重连")
 		}
 	}
